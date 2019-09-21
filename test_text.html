@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>test SvgText</title>
+ <link rel="stylesheet" href="default.css" />
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+  .block {
+    display:inline-block;
+    width:320px;
+    height:320px;
+    border:dotted thin silver;
+  }
+ </style>
+ <script src="Svg.js"></script>
+ <script>
+  $(()=> {
+    var text1 = new SvgText(320, 320, "SvgText", 100, 100);
+    $("#text1").html(text1.toString());
+    var text2 = new SvgText(320, 320, "漢字", 100, 100);
+    text2.fgColor = "magenta";
+    text2.fontSize = 52;
+    $("#text2").html(text2.toString());
+    var text3 = new SvgText(320, 320, "SvgText test", 50, 100);
+    text3.fgColor = "#008030";
+    text3.fontFamily = "Verdana";
+    $("#text3").html(text3.toString());
+  });
+ </script>
+</head>
+
+<body>
+ <h1>test SvgText</h1>
+ <div class="menubar"><a href="/">HOME</a></div>
+ <br />
+ <div class="section">
+  <div id="text1" class="block"></div>
+  <div id="text2" class="block"></div>
+  <div id="text3" class="block"></div>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>

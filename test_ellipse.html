@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>test SvgRect</title>
+ <link rel="stylesheet" href="default.css" />
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+  .block {
+    display:inline-block;
+    width:320px;
+    height:320px;
+    border:dotted thin silver;
+  }
+ </style>
+ <script src="Svg.js"></script>
+ <script>
+  $(()=> {
+    var ellipse1 = new SvgEllipse(320, 320, 159, 159, 158, 80);
+    $("#ellipse1").html(ellipse1.toString());
+    var ellipse2 = new SvgEllipse(320, 320, 159, 120, 60, 100);
+    ellipse2.borderWidth = 5;
+    ellipse2.bgColor = "#f0f0ff";
+    $("#ellipse2").html(ellipse2.toString());
+    var ellipse3 = new SvgEllipse(320, 320, 170, 150, 100, 130);
+    ellipse3.borderWidth = 3;
+    ellipse3.bgColor = "#e0f0f0";
+    ellipse3.fgColor = "#605040";
+    $("#ellipse3").html(ellipse3.toString());
+  });
+ </script>
+</head>
+
+<body>
+ <h1>test SvgEllipse</h1>
+ <div class="menubar"><a href="/">HOME</a></div>
+ <br />
+ <div class="section">
+  <div id="ellipse1" class="block"></div>
+  <div id="ellipse2" class="block"></div>
+  <div id="ellipse3" class="block"></div>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>
