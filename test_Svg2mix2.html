@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>Svg2.js mix (2)</title>
+ <link rel="stylesheet" href="default.css" />
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+  .canvas {
+    display:inline-block;
+    width:640px;
+    height:480px;
+    border:dotted 1px silver;
+  }
+ </style>
+ <script src="Svg2.js"></script>
+ <script>
+  function onload() {
+    var c = new SvgContainer(640, 480);
+    var rect1 = new SvgRect(50, 50, 560, 400);
+    rect1.fgColor = "black";
+    rect1.bgColor = "silver";
+    c.add(rect1);
+    var circle1 = new SvgCircle(200, 240, 80);
+    circle1.fgColor = "black";
+    circle1.bgColor = "white";
+    c.add(circle1);
+    var circle2 = new SvgCircle(500, 90, 80);
+    circle2.fgColor = "black";
+    circle2.bgColor = "lightgray";
+    c.add(circle2);
+    var ellipse1 = new SvgEllipse(400, 160, 100, 80);
+    ellipse1.fgColor = "black";
+    ellipse1.bgColor = "gray";
+    c.add(ellipse1);
+    var ellipse2 = new SvgEllipse(400, 360, 80, 60);
+    ellipse2.fgColor = "black";
+    ellipse2.bgColor = "dimgray";
+    c.add(ellipse2);
+    SvgContainer.setSvgByClass("canvas", c.toString());
+  }
+ </script>
+</head>
+
+<body onload="onload()">
+ <h1>Svg2.js mix (2)</h1>
+ <div class="menubar"><a href="/">HOME</a> | <a href="index.html">Index</a></div>
+ <div class="section">
+  <br />
+  <div class="canvas"></div>
+  <div class="canvas"></div>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>

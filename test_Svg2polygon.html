@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>Svg2.js polygon</title>
+ <link rel="stylesheet" href="default.css" />
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+  .canvas {
+    display:inline-block;
+    width:640px;
+    height:480px;
+    border:dotted 1px silver;
+  }
+ </style>
+ <script src="Svg2.js"></script>
+ <script>
+  function onload() {
+    var c = new SvgContainer(640, 480);
+    var polygon1 = new SvgPolygon();
+    polygon1.borderWidth = 2;
+    polygon1.fgColor = "red";
+    polygon1.bgColor = "#feda41";
+    polygon1.addPoint(160, 470);
+    polygon1.addPoint(320, 0);
+    polygon1.addPoint(470, 470);
+    polygon1.addPoint(320, 470);
+    c.add(polygon1);
+    var polygon2 = new SvgPolygon();
+    polygon2.borderWidth = 5;
+    polygon2.fgColor = "black";
+    polygon2.bgColor = "black";
+    polygon2.points = [10, 300, 120, 100, 500, 330, 10, 300];
+    c.add(polygon2);
+    SvgContainer.setSvgById("polygons", c.toString());
+  }
+ </script>
+</head>
+
+<body onload="onload()">
+ <h1>Svg2.js polygon</h1>
+ <div class="menubar"><a href="/">HOME</a></div>
+ <div class="section">
+  <br />
+  <div id="polygons" class="canvas"></div>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>

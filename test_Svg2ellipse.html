@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>Svg2.js ellipse</title>
+ <link rel="stylesheet" href="default.css" />
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+  .canvas {
+    display:inline-block;
+    width:640px;
+    height:480px;
+    border:dotted 1px silver;
+  }
+ </style>
+ <script src="Svg2.js"></script>
+ <script>
+  function onload() {
+    var c = new SvgContainer(640, 480);
+    var ellipse1 = new SvgEllipse(330, 230, 290, 200);
+    ellipse1.borderWidth = 2;
+    ellipse1.fgColor = "blue";
+    ellipse1.bgColor = "#f0f0ff";
+    c.add(ellipse1);
+    var ellipse2 = new SvgEllipse(310, 240, 120, 150);
+    ellipse2.borderWidth = 6;
+    ellipse2.fgColor = "pink";
+    ellipse2.bgColor = "#f0f0d0";
+    c.add(ellipse2);
+    SvgContainer.setSvgById("ellipses", c.toString());
+  }
+ </script>
+</head>
+
+<body onload="onload()">
+ <h1>Svg2.js ellipse</h1>
+ <div class="menubar"><a href="/">HOME</a></div>
+ <div class="section">
+  <br />
+  <div id="ellipses" class="canvas"></div>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>

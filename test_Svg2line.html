@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>Svg2.js line</title>
+ <link rel="stylesheet" href="default.css" />
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+ </style>
+ <script src="Svg2.js"></script>
+ <script>
+  function onload() {
+    var c = new SvgContainer(640, 400);
+    var line1 = new SvgLine(5, 200, 635, 200);
+    line1.borderWidth = 2;
+    line1.fgColor = "blue";
+    c.add(line1);
+    var line2 = new SvgLine(320, 0, 320, 400);
+    line2.borderWidth = 2;
+    line2.fgColor = "magenta";
+    c.add(line2);
+    var line3 = new SvgLine(0, 0, 640, 400);
+    line3.borderWidth = 6;
+    line3.fgColor = "orange";
+    c.add(line3);
+    SvgContainer.setSvgById("lines", c.toString());
+  }
+ </script>
+</head>
+
+<body onload="onload()">
+ <h1>Svg2.js line</h1>
+ <div class="menubar"><a href="/">HOME</a></div>
+ <div class="section">
+  <br />
+  <div id="lines" style="display:inline-block;width:640px;height:400px;"></div>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>

@@ -1,55 +1,105 @@
-/* SVG class */
+/* SVG class v2.0 */
 'use strict';
 
-/* SVG 基本クラス */
-class SvgBase {
+/* SVG コンテナクラス */
+class SvgContainer {
+  /* バージョン */
+  get Version() {
+    "2.0.0";
+  }
+  
   /* コンストラクタ */
   constructor(width, height) {
+    // キャンバスのサイズ
     this._width = width;
     this._height = height;
+    // SVG 図形のコレクション
+    this._elements = new Array();
+  }
+
+  /* xml タグ */  
+  get tagXML() {
+    return "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\" ?>\n";
+  }
+  
+  /* svg タグ */
+  get tagSVG() {
+    return `<svg width="${this._width}" height="${this._height}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this._width - 1} ${this._height -1}">\n`;
+  }
+  
+  /* キャンバスの幅 */
+  get width() {
+    return this._width;
+  }
+
+  /* キャンバスの高さ */
+  get height() {
+    return this._height;
+  }
+  
+  /* SVG 要素（図形）を追加する。*/
+  add(svg) {
+    svg.setSize(this.width, this.height);
+    this._elements.push(svg);
+  }
+  
+  /* 文字列表現 */
+  toString(xml=false) {
+    let str = "";
+    if (xml) {
+      str += this.tagXML;
+    }
+    str += this.tagSVG;
+    for (let elem of this._elements) {
+      str += elem;
+    }
+    str += "</svg>\n";
+    return str;
+  }
+  
+  /* id で指定された内容に body を設定する。*/
+  static setSvgById(id, body) {
+    let el = document.getElementById(id);
+    el.innerHTML = body;
+  } 
+
+  /* cls で指定された内容に body を設定する。*/
+  static setSvgByClass(cls, body) {
+    let elements = document.getElementsByClassName(cls);
+    for (let el of elements) {
+      el.innerHTML =body;
+    }
+  } 
+
+  /* tag で指定された内容に body を設定する。*/
+  static setSvgByTag(tag, body) {
+    let elements = document.getElementsByTagName(tag);
+    for (let el of elements) {
+      el.innerHTML =body;
+    }
+  } 
+}
+
+
+/* SVG 図形の基本クラス */
+class SvgBase {
+  /* コンストラクタ */
+  constructor() {
+    this._width = 640;
+    this._height = 480;
     this._fgcolor = "black";
     this._bgcolor = "white";
     this._borderWidth = 1;
     this._title = "";
   }
-
-  /* バージョン番号 */
-  static Version() {
-    return "1.0";
-  }
-
-  /* svg タグで囲む。*/
-  wrap_svgtag(body, xml= false) {
-    var str = "";
-    if (xml) {
-      str += "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\" ?>\n";
-    }
-    str += `<svg width="${this._width}" height="${this._height}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this._width - 1} ${this._height -1}">\n`;
-    if (this._title != "") {
-      str += "  <title>${this.title}</title>\n";
-    }
-    str += "  " + body;
-    str += "\n</svg>\n";
-    return str;
-  }
-
-  /* このオブジェクトの文字列表現 (オーバーライドが必要) */
-  toString(xml=false) {
-    return "";
-  }
- 
-  /* 図形の位置を変更する。*/
-  move(x, y) {
-    this._x = x;
-    this._y = y;
-  }
   
-  /* 図形の位置を得る。*/
-  position() {
-    return [this._x, this._y];
+  /* キャンバスサイズを設定する。*/
+  setSize(w, h) {
+    this._width = w;
+    this._height = h;
   }
-   
-  /* 境界線の色 property */
+
+  /* 前景(描画)色 */
   get fgColor() {
     return this._fgcolor;
   }
@@ -58,7 +108,7 @@ class SvgBase {
     this._fgcolor = c;
   }
   
-  /* 背景色 property */
+  /* 背景色 */
   get bgColor() {
     return this._bgcolor;
   }
@@ -67,31 +117,30 @@ class SvgBase {
     this._bgcolor = c;
   }
   
-  /* 境界線の幅 property */
+  /* 描画幅 */
   get borderWidth() {
     return this._borderWidth;
   }
   
-  set borderWidth(w) {
-    this._borderWidth = w;
+  set borderWidth(c) {
+    this._borderWidth = c;
   }
   
-  /* この図形のタイトル property */
+  /* タイトル */
   get title() {
     return this._title;
   }
   
-  set title(s) {
-    this._title = s;
+  set title(c) {
+    this._title = c;
   }
 }
-
 
 /* 直線 */
 class SvgLine extends SvgBase {
   /* コンストラクタ */
-  constructor(width, height, x1, y1, x2, y2) {
-    super(width, height);
+  constructor(x1, y1, x2, y2) {
+    super();
     this._x1 = x1;
     this._y1 = y1;
     this._x2 = x2;
@@ -101,8 +150,7 @@ class SvgLine extends SvgBase {
   /* SVG の文字列(body+style) */
   toString(xml=false) {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};`;
-    let body = `<line x1="${this._x1}" y1="${this._y1}" x2="${this._x2}" y2="${this._y2}" style="${style}" />`;
-    let shape = this.wrap_svgtag(body, xml);
+    let shape = `<line x1="${this._x1}" y1="${this._y1}" x2="${this._x2}" y2="${this._y2}" style="${style}" />\n`;
     return shape;
   }
 }
@@ -111,8 +159,8 @@ class SvgLine extends SvgBase {
 /* 矩形 */
 class SvgRect extends SvgBase {
   /* コンストラクタ */
-  constructor(width, height, x, y, w, h) {
-    super(width, height);
+  constructor(x, y, w, h) {
+    super();
     this._x = x;
     this._y = y;
     this._rect_width = w;
@@ -130,8 +178,7 @@ class SvgRect extends SvgBase {
   /* SVG の文字列(body+style) */
   toString(xml=false) {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
-    let body = `<rect x="${this._x}" y ="${this._y}" width="${this._rect_width}" height="${this._rect_height}" rx="${this._rx}" ry="${this._ry}" style="${style}" />`;
-    let shape = this.wrap_svgtag(body, xml);
+    let shape = `<rect x="${this._x}" y ="${this._y}" width="${this._rect_width}" height="${this._rect_height}" rx="${this._rx}" ry="${this._ry}" style="${style}" />\n`;
     return shape;    
   }
 }
@@ -139,8 +186,8 @@ class SvgRect extends SvgBase {
 /* 円 */
 class SvgCircle extends SvgBase {
   /* コンストラクタ */
-  constructor(width, height, x, y, r) {
-    super(width, height);
+  constructor(x, y, r) {
+    super();
     this._x = x;
     this._y = y;
     this._r = r;
@@ -149,8 +196,7 @@ class SvgCircle extends SvgBase {
   /* SVG の文字列(body+style) */
   toString(xml=false) {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
-    let body = `<circle cx="${this._x}" cy ="${this._y}" r="${this._r}" style="${style}" />`;
-    let shape = this.wrap_svgtag(body, xml);
+    let shape = `<circle cx="${this._x}" cy ="${this._y}" r="${this._r}" style="${style}" />\n`;
     return shape;
   }
 }
@@ -159,8 +205,8 @@ class SvgCircle extends SvgBase {
 /* 楕円 */
 class SvgEllipse extends SvgBase {
   /* コンストラクタ */
-  constructor(width, height, x, y, rx, ry) {
-    super(width, height, x, y);
+  constructor(x, y, rx, ry) {
+    super(x, y);
     this._x = x;
     this._y = y;
     this._rx = rx;
@@ -170,8 +216,7 @@ class SvgEllipse extends SvgBase {
   /* SVG の文字列(body+style) */
   toString(xml=false) {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
-    let body = `<ellipse cx="${this._x}" cy ="${this._y}" rx="${this._rx}" ry="${this._ry}" style="${style}" />`;
-    let shape = this.wrap_svgtag(body, xml);
+    let shape = `<ellipse cx="${this._x}" cy ="${this._y}" rx="${this._rx}" ry="${this._ry}" style="${style}" />`;
     return shape;
   }
 }
@@ -180,8 +225,8 @@ class SvgEllipse extends SvgBase {
 /* 折れ線 */
 class SvgPolyline extends SvgBase {
   /* コンストラクタ */
-  constructor(width, height) {
-    super(width, height);
+  constructor() {
+    super();
     this._points = new Array();
   }
   
@@ -206,8 +251,7 @@ class SvgPolyline extends SvgBase {
   toString(xml=false) {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};`;
     let p = this._points.join(' ');
-    let body = `<polyline fill="none" points="${p}" style="${style}" />`;
-    let shape = this.wrap_svgtag(body, xml);
+    let shape = `<polyline fill="none" points="${p}" style="${style}" />`;
     return shape;
   }
 }
@@ -216,8 +260,8 @@ class SvgPolyline extends SvgBase {
 /* 多角形 */
 class SvgPolygon extends SvgBase {
   /* コンストラクタ */
-  constructor(width=640, height=480) {
-    super(width, height);
+  constructor() {
+    super();
     this._points = new Array();
   }
 
@@ -242,8 +286,7 @@ class SvgPolygon extends SvgBase {
   toString(xml=false) {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
     let p = this._points.toString();
-    let body = `<polygon fill="none" points="${p}" style="${style}" />`;
-    let shape = this.wrap_svgtag(body, xml);
+    let shape = `<polygon fill="none" points="${p}" style="${style}" />`;
     return shape;
   }
 }
@@ -251,12 +294,12 @@ class SvgPolygon extends SvgBase {
 /* 文字列 */
 class SvgText extends SvgBase {
   /* コンストラクタ */
-  constructor(width, height, text, x=0, y=0) {
-    super(width, height);
+  constructor(text, x=0, y=0) {
+    super();
     this._text = text;
     this._x = x;
     this._y = y;
-    this._fontfamily = "メイリオ";
+    this._fontfamily = "sans-serif";
     this._fontsize = 24;
   }
   
@@ -282,8 +325,7 @@ class SvgText extends SvgBase {
   toString(xml=false) {
     let body = `<text x="${this._x}" y="${this._y}" fill="${this._fgcolor}" font-family="${this._fontfamily}" font-size="${this._fontsize}">`;
     body += this._text;
-    body += "</text>";
-    let text = this.wrap_svgtag(body, xml);
+    let text = body + "</text>";
     return text;
   }
 }

@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>Svg2.js mix (3)</title>
+ <link rel="stylesheet" href="default.css" />
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+  .canvas {
+    display:inline-block;
+    width:640px;
+    height:480px;
+    border:dotted 1px silver;
+  }
+ </style>
+ <script src="Svg2.js"></script>
+ <script>
+  function onload() {
+    var c = new SvgContainer(64, 64);
+    var circle1 = new SvgCircle(32, 32, 24);
+    circle1.fgColor = "darkred";
+    circle1.bgColor = "indianred";
+    c.add(circle1);
+    SvgContainer.setSvgByTag("article", c.toString());
+  }
+ </script>
+</head>
+
+<body onload="onload()">
+ <h1>Svg2.js mix (3)</h1>
+ <div class="menubar"><a href="/">HOME</a> | <a href="index.html">Index</a></div>
+ <div class="section">
+  <br />
+  <article></article>
+  <article></article>
+  <article></article>
+  <article></article>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>
