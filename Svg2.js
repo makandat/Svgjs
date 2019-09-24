@@ -1,11 +1,11 @@
-/* SVG class v2.0 */
+/* SVG class v2.1.0 */
 'use strict';
 
-/* SVG コンテナクラス */
+/* SVG コンテナクラス (v2.1.0) */
 class SvgContainer {
   /* バージョン */
   get Version() {
-    "2.0.0";
+    "2.1.0";
   }
   
   /* コンストラクタ */
@@ -15,6 +15,8 @@ class SvgContainer {
     this._height = height;
     // SVG 図形のコレクション
     this._elements = new Array();
+    // viewBox (v2.1.0)
+    this._viewBox = {x:0, y:0, width:this._width, height:this._height};
   }
 
   /* xml タグ */  
@@ -24,7 +26,7 @@ class SvgContainer {
   
   /* svg タグ */
   get tagSVG() {
-    return `<svg width="${this._width}" height="${this._height}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this._width - 1} ${this._height -1}">\n`;
+    return `<svg width="${this._width}" height="${this._height}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="${this._viewBox.x} ${this._viewBox.y} ${this._viewBox.width} ${this._viewBox.height}">\n`;
   }
   
   /* キャンバスの幅 */
@@ -43,6 +45,14 @@ class SvgContainer {
     this._elements.push(svg);
   }
   
+  /* viewBox を設定する。(v2.1.0) */
+  viewBox(x, y, w, h) {
+    this._viewBox.x = x;
+    this._viewBox.y = y;
+    this._viewBox.width = w;
+    this._viewBox.height = h;
+  }
+
   /* 文字列表現 */
   toString(xml=false) {
     let str = "";
@@ -81,16 +91,24 @@ class SvgContainer {
 }
 
 
-/* SVG 図形の基本クラス */
+/* SVG 図形の基本クラス (v2.1.0) */
 class SvgBase {
-  /* コンストラクタ */
-  constructor() {
+  /* コンストラクタ (v.2.1.0) */
+  constructor(options=null) {
     this._width = 640;
     this._height = 480;
-    this._fgcolor = "black";
-    this._bgcolor = "white";
-    this._borderWidth = 1;
-    this._title = "";
+    if (options == null) {
+      this._fgcolor = "black";
+      this._bgcolor = "white";
+      this._borderWidth = 1;
+      this._title = "";
+    }
+    else {
+      this._fgcolor = options["fgcolor"] == undefined ? "black" : options["fgcolor"];
+      this._bgcolor = options["bgcolor"] == undefined ? "white" : options["bgcolor"];
+      this._borderWidth = options["borderWidth"] == undefined ? 1 : options["borderWidth"];
+      this._title = options["title"] == undefined ? "" : options["title"];
+    }
   }
   
   /* キャンバスサイズを設定する。*/
@@ -139,8 +157,8 @@ class SvgBase {
 /* 直線 */
 class SvgLine extends SvgBase {
   /* コンストラクタ */
-  constructor(x1, y1, x2, y2) {
-    super();
+  constructor(x1, y1, x2, y2, options=null) {
+    super(options);
     this._x1 = x1;
     this._y1 = y1;
     this._x2 = x2;
@@ -159,8 +177,8 @@ class SvgLine extends SvgBase {
 /* 矩形 */
 class SvgRect extends SvgBase {
   /* コンストラクタ */
-  constructor(x, y, w, h) {
-    super();
+  constructor(x, y, w, h, options=null) {
+    super(options);
     this._x = x;
     this._y = y;
     this._rect_width = w;
@@ -186,8 +204,8 @@ class SvgRect extends SvgBase {
 /* 円 */
 class SvgCircle extends SvgBase {
   /* コンストラクタ */
-  constructor(x, y, r) {
-    super();
+  constructor(x, y, r, options=null) {
+    super(options);
     this._x = x;
     this._y = y;
     this._r = r;
@@ -205,8 +223,8 @@ class SvgCircle extends SvgBase {
 /* 楕円 */
 class SvgEllipse extends SvgBase {
   /* コンストラクタ */
-  constructor(x, y, rx, ry) {
-    super(x, y);
+  constructor(x, y, rx, ry, options=null) {
+    super(x, y, options);
     this._x = x;
     this._y = y;
     this._rx = rx;
@@ -225,8 +243,8 @@ class SvgEllipse extends SvgBase {
 /* 折れ線 */
 class SvgPolyline extends SvgBase {
   /* コンストラクタ */
-  constructor() {
-    super();
+  constructor(options=null) {
+    super(options);
     this._points = new Array();
   }
   
@@ -260,8 +278,8 @@ class SvgPolyline extends SvgBase {
 /* 多角形 */
 class SvgPolygon extends SvgBase {
   /* コンストラクタ */
-  constructor() {
-    super();
+  constructor(options=null) {
+    super(options);
     this._points = new Array();
   }
 
@@ -294,8 +312,8 @@ class SvgPolygon extends SvgBase {
 /* 文字列 */
 class SvgText extends SvgBase {
   /* コンストラクタ */
-  constructor(text, x=0, y=0) {
-    super();
+  constructor(text, x=0, y=0, options=null) {
+    super(options);
     this._text = text;
     this._x = x;
     this._y = y;
