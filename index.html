@@ -2,30 +2,55 @@
 <html>
 <head>
  <meta charset="utf-8" />
- <title>テストページ</title>
+ <title>Svg2.js v2.00</title>
  <link rel="stylesheet" href="default.css" />
- <script src="/js/jquery.min.js"></script>
  <style>
-  .flow2 {
-    display:inline-block;
-    width:45%;
-    vertical-align:top;
-  }
-  .flow4 {
-    display:inline-block;
-    width:20%;
-    vertical-align:top;
-  }
  </style>
 </head>
 
 <body>
-<h1>Svg2.js テストページ</h1>
+<h1>Svg2.js v2.00</h1>
 <!-- menubar -->
 <p class="menubar"><a href="/"><img src="/img/home.png" /> HOME</a> / <a href="../index.html">UP..</a></div>
 <br />
 
 <div class="section">
+ <!-- はじめに -->
+ <h2>はじめに</h2>
+ <p>Svg2.js は JavaScript により動的に SVG を作り、HTML に埋め込むためのライブラリである。</p>
+ <h2>簡単な例</h2>
+ <pre class="sample"><code>
+ &lt;script src="Svg2.js"&gt;&lt;/script&gt;
+ &lt;script&gt;
+  // ブラウザにより HTML ドキュメントの読み込みが完了したとき
+  function onload() {
+    // 図形のコンテナを作成
+    var c = new SvgContainer(640, 480);
+    // 図形(円)を作成
+    var circle1 = new SvgCircle(240, 240, 220);
+    // 図形のオプションを変更
+    circle1.borderWidth = 2;
+    circle1.fgColor = "blue";
+    circle1.bgColor = "#f0f0ff";
+    // コンテナに追加
+    c.add(circle1);
+    // コンテナに入っている図形を SVG として div 要素の内容として書き出す。
+    SvgContainer.setSvgById("circles", c.toString());
+  }
+ &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body onload="onload()"&gt;
+  ...
+
+ &lt;div id="circles"&gt;&lt;/div&gt;
+  ...
+
+ </code></pre>
+ <br />
+
+ <!-- テストとサンプル -->
+ <h2>テストとサンプル</h2>
  <ul style="margin-left:20%;">
   <li><a href="test_Svg2line.html">Line</a></li>
   <li><a href="test_Svg2rect.html">Rect</a></li>
@@ -38,6 +63,154 @@
   <li><a href="test_Svg2mix2.html">Mix(2)</a></li>
   <li><a href="test_Svg2mix3.html">Mix(3)</a></li>
  </ul>
+ <br />
+
+ <!-- 仕様 -->
+ <h2>仕様</h2>
+  <!--  クラス -->
+ <h3>クラス</h3>
+ <p>Svg2.js は次のクラスからなる。</p>
+ <dl>
+  <dt>SvgContainer</dt>
+  <dd>SvgBase またはその派生クラス(円や矩形など)のインスタンスのコンテナである。</ddt>
+ </dl>
+ <dl>
+  <dt>SvgBase</dt>
+  <dd>具体的な図形クラスの基底クラスである。</ddt>
+ </dl>
+ <dl>
+  <dt>Svg...</dt>
+  <dd>具体的な図形クラスを表すクラスである。次のようなものがある。
+    <ul>
+     <li>SvgLine</li>
+     <li>SvgRect</li>
+     <li>SvgCircle</li>
+     <li>SvgEllipse</li>
+     <li>SvgPolyline</li>
+     <li>SvgPolygon</li>
+     <li>SvgText</li>
+    </ul>
+  </ddt>
+ </dl>
+ <br />
+  <!--  SvgContainer クラス -->
+ <h3>SvgContainer クラス</h3>
+  <h4>基底クラス</h4>
+  <p>なし。</p>
+  <h4>コンストラクタ</h4>
+  <h5>constructor(width, height)</h5>
+  <ul>
+   <li>width: 描画領域の幅</li>
+   <li>height: 描画領域の高さ</li>
+  </ul>
+  <br />
+  <h4>メソッド</h4>
+   <h5>add(svg)</h5>
+   <p>図形要素 (svg) をコンテナに追加する。svg は SvgBase から派生したクラスのインスタンスであること。</p>
+   <br />
+   <h5>toString(xml=false)</h5>
+   <p>このコンテナを SVG 文字列に変換しその文字列を返す。xml が true の場合、xml ヘッダを付ける。(外部 SVG ファイルにする場合に指定する)</p>
+   <br />
+   <h5>static setSvgById(id, body)</h5>
+   <p>識別名 id で指定された HTML 要素の 内容 (HTML) に body (xmlヘッダなしのSVG) を割り当てる。</p>
+   <br />
+   <h5>static setSvgByClass(cls, body)</h5>
+   <p>クラス名 cls で指定されたすべての HTML 要素の 内容 (HTML) に body (xmlヘッダなしのSVG) を割り当てる。</p>
+   <br />
+   <h5>static setSvgByTag(tag, body)</h5>
+   <p>タグ名 tag で指定されたすべての HTML 要素の 内容 (HTML) に body (xmlヘッダなしのSVG) を割り当てる。</p>
+   <br />
+  <h4>プロパティ</h4>
+   <h5>(get) Version</h5>
+   <p>バージョン番号を返す。</p>
+   <br />
+   <h5>(get) tagXML</h5>
+   <p>xml タグを返す。(クラス内部で使用する)</p>
+   <br />
+   <h5>(get) tagSVG</h5>
+   <p>svg タグを返す。(クラス内部で使用する)</p>
+   <br />
+   <h5>(get/set) width</h5>
+   <p>描画領域の幅。(主にクラス内部で使用する)</p>
+   <br />
+   <h5>(get/set) height</h5>
+   <p>描画領域の高さ。(主にクラス内部で使用する)</p>
+   <br />
+   <h5></h5>
+   <p></p>
+   <br />
+  <br />
+  <!--  SvgBase クラス -->
+ <h3>SvgBase クラス</h3>
+  <h4>基底クラス</h4>
+  <p>なし。</p>
+  <h4>コンストラクタ</h4>
+  <h5>constructor()</h5>
+  <br />
+  <h4>メソッド</h4>
+  <h5>setSize(w, h)</h5>
+  <p>描画領域の幅と高さをそれぞれ w, h に設定する。(主にクラス内部で使用する)</p>
+  <br />
+  <h4>プロパティ</h4>
+  <h5>(get/set) fgColor</h5>
+  <p>図形の前景色(境界線の色)を取得・変更する。初期値は黒。</p>
+  <br />
+  <h5>(get/set) bgColor</h5>
+  <p>図形の背景色を取得・変更する。初期値は白。</p>
+  <br />
+  <h5>(get/set) borderWidth</h5>
+  <p>図形の境界線の幅を取得・変更する。初期値は 1。</p>
+  <br />
+  <h5>(get/set) title</h5>
+  <p>図形のタイトルを取得・設定する。初期値は ""。</p>
+  <br />
+
+  <!--  SvgBase から派生した図形クラス -->
+  <h3>SvgBase から派生した図形クラス</h3>
+  <h4>SvgLine</h4>
+  <p>このクラスは直線を表す図形クラス。コンストラクタは<blockquote>constructor(x1, y1, x2, y2)</blockquote>
+で、(x1, y1) は直線の起点、(x2, y2)は終点を表す。
+</p>
+  <br />
+  <h4>SvgRect</h4>
+  <p>このクラスは矩形を表す図形クラス。コンストラクタは<blockquote>constructor(x, y, w, h)</blockquote>
+で、(x, y) は矩形の左上の座標、w は矩形の幅、 h は高さを表す。独自に メソッド setRoundt(rx, ry) を持つ。これは矩形の角を丸めるとき使用する。rx, ry は丸めの幅と高さである。
+</p>
+  <br />
+  <h4>SvgCircle</h4>
+  <p>このクラスは円を表す図形クラス。コンストラクタは<blockquote>constructor(x, y, r)</blockquote>
+で、(x, y) は円の中心、r は半径を表す。</p>
+  <br />
+  <h4>SvgEllipse</h4>
+  <p>このクラスは楕円表す図形クラス。コンストラクタは<blockquote>constructor(x, y, rx, ry)</blockquote>
+で、(x, y) は楕円の中心、rx, ry はそれぞれ x 方向と y 方向の半径を表す。</p>
+  <br />
+  <h4>SvgPolyline</h4>
+  <p>このクラスは折れ線を表す図形クラス。コンストラクタは<blockquote>constructor()</blockquote>
+である。折れ線の指定は、メソッド addPoint(x, y) またはプロパティ (get/set) points で行う。points は (x1, y1, x2, y2, ..) のフラットな配列である。</p>
+  <br />
+  <h4>SvgPolygon</h4>
+  <p>このクラスは多角形を表す図形クラス。コンストラクタは<blockquote>constructor()</blockquote>
+である。多角形の指定は、メソッド addPoint(x, y) またはプロパティ (get/set) points で行う。points は (x1, y1, x2, y2, ..) のフラットな配列である。</p>
+  <br />
+  <h4>SvgText</h4>
+  <p>このクラスは文字列を表す図形クラス。コンストラクタは<blockquote>constructor(text, x=0, y=0)</blockquote>で text は描画する文字列、(x, y) は描画位置の座標である。このクラスは次の独自プロパティを持つ。</p>
+  <ul>
+    <li>(get/set) fontSize: フォントの大きさを取得・設定。</li>
+    <li>(get/set) fontFamily: フォント種別を取得・設定。</li>
+  </ul>
+  <br />
+
+ <!-- 履歴 -->
+ <h2>履歴</h2>
+ <ul>
+  <li>v1.00 2019 仕様不可により失敗</li>
+  <li>v2.00 2019-09-23 作り直し</li>
+  <li></li>
+ </ul>
+ <br />
+
+
 </div>
 <p>&nbsp;</p>
 <p>&nbsp;</p>

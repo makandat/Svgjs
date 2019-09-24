@@ -118,6 +118,10 @@ blockquote {
   padding:6px;
 }
 
+dt {
+  font-weight: bold;
+}
+
 /* ソース表示 */
 pre.sample {
  border: solid thin gray;
@@ -169,6 +173,11 @@ pre.src {
     padding:5px;
     border: solid thin powderblue;
     background-color: lightcyan;
+  }
+
+  .section {
+    margin-left:10%;
+    margin-right:10%;
   }
 
 /* フォームとコントロール関連 */
