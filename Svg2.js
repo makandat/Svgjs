@@ -1,11 +1,11 @@
-/* SVG class v2.1.0 */
+/* SVG class v2.2.0 */
 'use strict';
 
-/* SVG コンテナクラス (v2.1.0) */
+/* == SVG コンテナクラス (v2.2.0) == */
 class SvgContainer {
   /* バージョン */
   get Version() {
-    "2.1.0";
+    "2.2.0";
   }
   
   /* コンストラクタ */
@@ -17,6 +17,8 @@ class SvgContainer {
     this._elements = new Array();
     // viewBox (v2.1.0)
     this._viewBox = {x:0, y:0, width:this._width, height:this._height};
+    // defs タグのリテラル
+    this._defs_literal = "";
   }
 
   /* xml タグ */  
@@ -39,6 +41,15 @@ class SvgContainer {
     return this._height;
   }
   
+  /* defs のリテラル (v2.2.0) */
+  get defs_literal() {
+    return this._defs_literal;
+  }
+
+  set defs_literal(literal) {
+    this._defs_literal = literal;
+  }
+  
   /* SVG 要素（図形）を追加する。*/
   add(svg) {
     svg.setSize(this.width, this.height);
@@ -53,13 +64,15 @@ class SvgContainer {
     this._viewBox.height = h;
   }
 
-  /* 文字列表現 */
+  /* 文字列表現 (v2.2.0) */
   toString(xml=false) {
     let str = "";
     if (xml) {
       str += this.tagXML;
     }
     str += this.tagSVG;
+    if (this.defs_literal != "")
+      str += this.defs_literal;
     for (let elem of this._elements) {
       str += elem;
     }
@@ -91,9 +104,9 @@ class SvgContainer {
 }
 
 
-/* SVG 図形の基本クラス (v2.1.0) */
-class SvgBase {
-  /* コンストラクタ (v.2.1.0) */
+/* == SVG 図形の基本クラス (v2.2.0) == */
+class SvgShape {
+  /* コンストラクタ (v.2.2.0) */
   constructor(options=null) {
     this._width = 640;
     this._height = 480;
@@ -154,8 +167,8 @@ class SvgBase {
   }
 }
 
-/* 直線 */
-class SvgLine extends SvgBase {
+/* == 直線クラス == */
+class SvgLine extends SvgShape {
   /* コンストラクタ */
   constructor(x1, y1, x2, y2, options=null) {
     super(options);
@@ -166,7 +179,7 @@ class SvgLine extends SvgBase {
   }
 
   /* SVG の文字列(body+style) */
-  toString(xml=false) {
+  toString() {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};`;
     let shape = `<line x1="${this._x1}" y1="${this._y1}" x2="${this._x2}" y2="${this._y2}" style="${style}" />\n`;
     return shape;
@@ -174,8 +187,8 @@ class SvgLine extends SvgBase {
 }
 
 
-/* 矩形 */
-class SvgRect extends SvgBase {
+/* == 矩形クラス == */
+class SvgRect extends SvgShape {
   /* コンストラクタ */
   constructor(x, y, w, h, options=null) {
     super(options);
@@ -194,15 +207,15 @@ class SvgRect extends SvgBase {
   }
 
   /* SVG の文字列(body+style) */
-  toString(xml=false) {
+  toString() {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
     let shape = `<rect x="${this._x}" y ="${this._y}" width="${this._rect_width}" height="${this._rect_height}" rx="${this._rx}" ry="${this._ry}" style="${style}" />\n`;
     return shape;    
   }
 }
 
-/* 円 */
-class SvgCircle extends SvgBase {
+/* == 円クラス == */
+class SvgCircle extends SvgShape {
   /* コンストラクタ */
   constructor(x, y, r, options=null) {
     super(options);
@@ -212,7 +225,7 @@ class SvgCircle extends SvgBase {
   }
 
   /* SVG の文字列(body+style) */
-  toString(xml=false) {
+  toString() {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
     let shape = `<circle cx="${this._x}" cy ="${this._y}" r="${this._r}" style="${style}" />\n`;
     return shape;
@@ -220,8 +233,8 @@ class SvgCircle extends SvgBase {
 }
 
 
-/* 楕円 */
-class SvgEllipse extends SvgBase {
+/* == 楕円クラス == */
+class SvgEllipse extends SvgShape {
   /* コンストラクタ */
   constructor(x, y, rx, ry, options=null) {
     super(x, y, options);
@@ -232,7 +245,7 @@ class SvgEllipse extends SvgBase {
   }
 
   /* SVG の文字列(body+style) */
-  toString(xml=false) {
+  toString() {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
     let shape = `<ellipse cx="${this._x}" cy ="${this._y}" rx="${this._rx}" ry="${this._ry}" style="${style}" />`;
     return shape;
@@ -240,8 +253,8 @@ class SvgEllipse extends SvgBase {
 }
 
 
-/* 折れ線 */
-class SvgPolyline extends SvgBase {
+/* == 折れ線 クラス == */
+class SvgPolyline extends SvgShape {
   /* コンストラクタ */
   constructor(options=null) {
     super(options);
@@ -266,7 +279,7 @@ class SvgPolyline extends SvgBase {
   }
 
   /* SVG の文字列(body+style) */
-  toString(xml=false) {
+  toString() {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};`;
     let p = this._points.join(' ');
     let shape = `<polyline fill="none" points="${p}" style="${style}" />`;
@@ -275,8 +288,8 @@ class SvgPolyline extends SvgBase {
 }
 
 
-/* 多角形 */
-class SvgPolygon extends SvgBase {
+/* == 多角形 クラス == */
+class SvgPolygon extends SvgShape {
   /* コンストラクタ */
   constructor(options=null) {
     super(options);
@@ -301,7 +314,7 @@ class SvgPolygon extends SvgBase {
   }
 
   /* SVG の文字列(body+style) */
-  toString(xml=false) {
+  toString() {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
     let p = this._points.toString();
     let shape = `<polygon fill="none" points="${p}" style="${style}" />`;
@@ -309,8 +322,8 @@ class SvgPolygon extends SvgBase {
   }
 }
 
-/* 文字列 */
-class SvgText extends SvgBase {
+/* == 文字列クラス == */
+class SvgText extends SvgShape {
   /* コンストラクタ */
   constructor(text, x=0, y=0, options=null) {
     super(options);
@@ -340,11 +353,62 @@ class SvgText extends SvgBase {
   }
 
   /* SVG の文字列(body+style) */
-  toString(xml=false) {
+  toString() {
     let body = `<text x="${this._x}" y="${this._y}" fill="${this._fgcolor}" font-family="${this._fontfamily}" font-size="${this._fontsize}">`;
     body += this._text;
     let text = body + "</text>";
     return text;
   }
 }
+
+/* == Path クラス (v2.2.0) == */
+class SvgPath extends SvgShape {
+  /* コンストラクタ */
+  constructor(options=null) {
+    super(options);
+    this._path = "";
+  }
+  
+  /* パスコマンドを追加する。*/
+  addCommand(cmd) {
+    this._path += cmd;
+  }
+  
+  /* パスを表すプロパティ */
+  get path() {
+    return this._path;
+  }
+  
+  set path(p) {
+    this._path = p;
+  }
+  
+  /* 文字列表現 */
+  toString() {
+    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
+    let shape = `<path d="${this._path}" style="${style}" />`;
+    return shape;
+  }
+}
+
+
+/* == Use クラス (v2.2.0) == */
+class SvgUse extends SvgShape{
+  /* コンストラクタ */
+  constructor(x, y, w, h, xlink, options=null) {
+    super(options);
+    this._x = x;
+    this._y = y;
+    this._width = w;
+    this._height = h;
+    this._xlink = xlink;
+  }
+
+  /* 文字列表現 */
+  toString() {
+    let use = `<use x="${this._x}" y="${this._y}" width="${this._width}" height="${this._height}" xlink:href="${this._xlink}" />`;
+    return use;
+  }
+}
+
 

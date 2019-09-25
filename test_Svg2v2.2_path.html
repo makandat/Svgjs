@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta charset="utf-8" />
- <title>Svg2.js circle</title>
+ <title>Svg2.js v2.2.0 PATH</title>
  <link rel="stylesheet" href="default.css" />
  <style>
   .section {
@@ -21,27 +21,28 @@
  <script>
   function onload() {
     var c = new SvgContainer(640, 480);
-    var circle1 = new SvgCircle(240, 240, 220);
-    circle1.borderWidth = 2;
-    circle1.fgColor = "blue";
-    circle1.bgColor = "#f0f0ff";
-    c.add(circle1);
-    var circle2 = new SvgCircle(240, 240, 160);
-    circle2.borderWidth = 6;
-    circle2.fgColor = "pink";
-    circle2.bgColor = "#f0f0d0";
-    c.add(circle2);
-    SvgContainer.setSvgById("circles", c.toString());
+    var path = new SvgPath();
+    path.addCommand("M 50 50 ");
+    path.addCommand("L 300 150 ");
+    path.addCommand("L 50 250 ");
+    path.addCommand("L 350 350 ");
+    path.addCommand("M 450 400 ");
+    path.addCommand("L 550 400 ");
+    path.addCommand("L 550 350 ");
+    path.addCommand("L 600 50 ");
+    path.addCommand("Z");
+    c.add(path);
+    SvgContainer.setSvgById("shapes", c.toString());
   }
  </script>
 </head>
 
 <body onload="onload()">
- <h1>Svg2.js circle</h1>
+ <h1>Svg2.js v2.2.0 PATH</h1>
  <div class="menubar"><a href="/">HOME</a> | <a href="index.html">Index</a></div>
  <div class="section">
   <br />
-  <div id="circles" class="canvas"></div>
+  <div id="shapes" class="canvas"></div>
  </div>
  <p>&nbsp;</p>
  <p style="text-align:center;"><a href="#top">TOP</a></p>

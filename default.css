@@ -118,8 +118,13 @@ blockquote {
   padding:6px;
 }
 
+.section {
+  margin-left:10%;
+  margin-right:10%;
+}
+
 dt {
-  font-weight: bold;
+  font-weight:bold;
 }
 
 /* ソース表示 */
@@ -173,11 +178,6 @@ pre.src {
     padding:5px;
     border: solid thin powderblue;
     background-color: lightcyan;
-  }
-
-  .section {
-    margin-left:10%;
-    margin-right:10%;
   }
 
 /* フォームとコントロール関連 */

@@ -2,14 +2,15 @@
 <html>
 <head>
  <meta charset="utf-8" />
- <title>Svg2.js v2.00</title>
+ <title>Svg2.js v2.20</title>
  <link rel="stylesheet" href="default.css" />
  <style>
  </style>
 </head>
 
 <body>
-<h1>Svg2.js v2.00</h1>
+<!-- 本文 -->
+<h1>Svg2.js v2.20</h1>
 <!-- menubar -->
 <p class="menubar"><a href="/"><img src="/img/home.png" /> HOME</a> / <a href="../index.html">UP..</a></div>
 <br />
@@ -63,6 +64,8 @@
   <li><a href="test_Svg2mix2.html">Mix(2)</a></li>
   <li><a href="test_Svg2mix3.html">Mix(3)</a></li>
   <li><a href="test_Svg2v2.1.html">New features v2.1.0</a></li>
+  <li><a href="test_Svg2v2.2_path.html">New features v2.2.0 path</a></li>
+  <li><a href="test_Svg2v2.2_use.html">New features v2.2.0 use</a></li>
  </ul>
  <br />
 
@@ -73,10 +76,10 @@
  <p>Svg2.js は次のクラスからなる。</p>
  <dl>
   <dt>SvgContainer</dt>
-  <dd>SvgBase またはその派生クラス(円や矩形など)のインスタンスのコンテナである。</ddt>
+  <dd>SvgShape またはその派生クラス(円や矩形など)のインスタンスのコンテナである。</ddt>
  </dl>
  <dl>
-  <dt>SvgBase</dt>
+  <dt>SvgShape</dt>
   <dd>具体的な図形クラスの基底クラスである。</ddt>
  </dl>
  <dl>
@@ -107,7 +110,7 @@
   <br />
   <h4>メソッド</h4>
    <h5>add(svg)</h5>
-   <p>図形要素 (svg) をコンテナに追加する。svg は SvgBase から派生したクラスのインスタンスであること。</p>
+   <p>図形要素 (svg) をコンテナに追加する。svg は SvgShape から派生したクラスのインスタンスであること。</p>
    <br />
    <h5>toString(xml=false)</h5>
    <p>このコンテナを SVG 文字列に変換しその文字列を返す。xml が true の場合、xml ヘッダを付ける。(外部 SVG ファイルにする場合に指定する)</p>
@@ -137,12 +140,14 @@
    <h5>(get/set) height</h5>
    <p>描画領域の高さ。(主にクラス内部で使用する)</p>
    <br />
-   <h5></h5>
-   <p></p>
+   <h5>(get/set) literal</h5>
+   <p>svg タグに含まれる SVG コード。defs などの定義そのものを想定している。</p>
    <br />
   <br />
-  <!--  SvgBase クラス -->
- <h3>SvgBase クラス</h3>
+  
+   
+  <!--  SvgShape クラス -->
+ <h3>SvgShape クラス</h3>
   <h4>基底クラス</h4>
   <p>なし。</p>
   <h4>コンストラクタ</h4>
@@ -166,8 +171,8 @@
   <p>図形のタイトルを取得・設定する。初期値は ""。</p>
   <br />
 
-  <!--  SvgBase から派生した図形クラス -->
-  <h3>SvgBase から派生した図形クラス</h3>
+  <!--  SvgShape から派生した図形クラス -->
+  <h3>SvgShape から派生した図形クラス</h3>
   <h4>SvgLine</h4>
   <p>このクラスは直線を表す図形クラス。コンストラクタは<blockquote>constructor(x1, y1, x2, y2)</blockquote>
 で、(x1, y1) は直線の起点、(x2, y2)は終点を表す。
@@ -202,6 +207,18 @@
   </ul>
   <br />
 
+  <h4>SvgUse</h4>
+  <p>このクラスは defs_literal で定義されたシンボルなどを描画する図形クラス。コンストラクタは<blockquote>constructor(x, y, w, h, xlink)</blockquote>で (x, y) は描画位置の座標、w, h は図形の幅と高さ、xlink はシンボルなどの識別文字列である。</p>
+  <br />
+
+  <h4>SvgPath</h4>
+  <p>このクラスはパスコマンドによる描画図形クラス。コンストラクタは<blockquote>constructor()</blockquote>である。パスコマンドの追加あるいは設定は次のメソッド、プロパティで行う。</p>
+  <ul>
+    <li>addCommand(cmd): パスコマンド(cmd)を追加する。</li>
+    <li>(get/set) path: パスコマンド全体を取得・設定。</li>
+  </ul>
+  <br />
+
  <!-- 履歴 -->
  <h2>履歴</h2>
  <ul>
@@ -210,8 +227,16 @@
   <li>v2.10 2019-09-25
     <ul>
      <li>viewBox メソッド追加。</li>
-     <li>SvgBase クラスのコンストラクタに options パラメータを追加。</li>
+     <li>SvgShape クラスのコンストラクタに options パラメータを追加。</li>
     </ul>
+  </li>
+  <li>v2.20 2019-09-26
+   <ul>
+    <li>SvgBase の名前を SvgShape に変更する。</li>
+    <li>SvgContainer クラスに defs_literal プロパティを新設する。これは SVG コードそのものを保持し、svg タグに含まれるものである。</li>
+    <li>シンボルやグループを描画するためのSvgShape 派生クラス SvgUse を追加。</li>
+    <li>Path をサポートするSvgShape 派生クラス SvgPath を追加。</li>
+   </ul>
   </li>
  </ul>
  <br />
