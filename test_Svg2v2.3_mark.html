@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta charset="utf-8" />
- <title>Svg2.js v2.2.0 use</title>
+ <title>Svg2.js v2.3.0 mark</title>
  <link rel="stylesheet" href="default.css" />
  <style>
   .section {
@@ -19,23 +19,31 @@
  </style>
  <script src="Svg2.js"></script>
  <script>
+  'use strict';
+
   function onload() {
     var c = new SvgContainer(640, 480);
     c.defs_literal = `<defs>
-      <symbol id="eye" viewbox="0 0 680 480">
-        <circle cx="320" cy="240" r="160" stroke="black" fill="white" stroke-width="4"></circle>
-        <circle cx="320" cy="240" r="50" stroke="dimgray" fill="black"></circle>
-      </symbol>
-    </defs>`;
-    var use = new SvgUse(0, 0, 640, 480, "#eye");
-    c.add(use);
+  <marker id="arrow1" markerUnits="strokeWidth" markerWidth="12" markerHeight="12" viewBox="0 0 12 12" refX="4" refY="6" orient="auto">
+    <polygon points="4 0 4 12 12 5 4 0 " fill="black" />
+  <marker id="arrow2" markerUnits="strokeWidth" markerWidth="12" markerHeight="12" viewBox="0 0 12 12" refX="4" refY="6" orient="auto">
+    <polygon points="4 0 4 12 12 5 4 0 " fill="black" />
+  </marker>
+</defs>`;
+    var line1 = new SvgLine(60, 150, 580, 150); 
+    line1.marker = "arrow1";
+    c.add(line1);
+    var polyline1 = new SvgPolyline({fgcolor:"black", borderWidth:1}); 
+    polyline1.points = [60, 300, 250, 370, 480, 280, 540, 410];
+    polyline1.marker = "arrow2";
+    c.add(polyline1);
     SvgContainer.setSvgById("shapes", c.toString());
   }
  </script>
 </head>
 
 <body onload="onload()">
- <h1>Svg2.js v2.2.0 Use</h1>
+ <h1>Svg2.js v2.3.0 mark</h1>
  <div class="menubar"><a href="/">HOME</a> | <a href="index.html#test">Index</a></div>
  <div class="section">
   <br />

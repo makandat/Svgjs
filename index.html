@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta charset="utf-8" />
- <title>Svg2.js v2.20</title>
+ <title>Svg2.js v2.30</title>
  <link rel="stylesheet" href="default.css" />
  <style>
  </style>
@@ -10,15 +10,16 @@
 
 <body>
 <!-- 本文 -->
-<h1>Svg2.js v2.20</h1>
+<h1>Svg2.js v2.30</h1>
 <!-- menubar -->
 <p class="menubar"><a href="/"><img src="/img/home.png" /> HOME</a> / <a href="../index.html">UP..</a></div>
 <br />
 
 <div class="section">
  <!-- はじめに -->
- <h2>はじめに</h2>
+ <h2><a id="start"></a>はじめに</h2>
  <p>Svg2.js は JavaScript により動的に SVG を作り、HTML に埋め込むためのライブラリである。</p>
+ <br />
  <h2>簡単な例</h2>
  <pre class="sample"><code>
  &lt;script src="Svg2.js"&gt;&lt;/script&gt;
@@ -51,7 +52,7 @@
  <br />
 
  <!-- テストとサンプル -->
- <h2>テストとサンプル</h2>
+ <h2><a id="test"></a>テストとサンプル</h2>
  <ul style="margin-left:20%;">
   <li><a href="test_Svg2line.html">Line</a></li>
   <li><a href="test_Svg2rect.html">Rect</a></li>
@@ -66,11 +67,16 @@
   <li><a href="test_Svg2v2.1.html">New features v2.1.0</a></li>
   <li><a href="test_Svg2v2.2_path.html">New features v2.2.0 path</a></li>
   <li><a href="test_Svg2v2.2_use.html">New features v2.2.0 use</a></li>
+  <li><a href="test_Svg2v2.3_dash.html">New features v2.3.0 dash</a></li>
+  <li><a href="test_Svg2v2.3_opacity.html">New features v2.3.0 opacity</a></li>
+  <li><a href="test_Svg2v2.3_transform.html">New features v2.3.0 transform</a></li>
+  <li><a href="test_Svg2v2.3_mark.html">New features v2.3.0 mark</a></li>
+  <li><a href="test_Svg2v2.3_image.html">New features v2.3.0 image</a></li>
  </ul>
  <br />
 
  <!-- 仕様 -->
- <h2>仕様</h2>
+ <h2><a id="spec"></a>仕様</h2>
   <!--  クラス -->
  <h3>クラス</h3>
  <p>Svg2.js は次のクラスからなる。</p>
@@ -220,7 +226,7 @@
   <br />
 
  <!-- 履歴 -->
- <h2>履歴</h2>
+ <h2><a id="history"></a>履歴</h2>
  <ul>
   <li>v1.00 2019 仕様不可により失敗</li>
   <li>v2.00 2019-09-23 作り直し</li>
@@ -236,6 +242,21 @@
     <li>SvgContainer クラスに defs_literal プロパティを新設する。これは SVG コードそのものを保持し、svg タグに含まれるものである。</li>
     <li>シンボルやグループを描画するためのSvgShape 派生クラス SvgUse を追加。</li>
     <li>Path をサポートするSvgShape 派生クラス SvgPath を追加。</li>
+   </ul>
+  </li>
+  <li>v2.30 2019-09-27
+   <ul>
+    <li>線の属性(点線など)を追加する。</li>
+    <li>透過率を追加</li>
+    <li>拡大縮小、回転(transform)を追加する。</li>
+    <li>矢印の追加</li>
+    <li>画像の追加</li>
+   </ul>
+  <li>v2.40 2019-09-28
+   <ul>
+     <li>影付きの追加</li>
+     <li>明暗・色調遷移の追加</li>
+     <li>文字飾り(下線など)の追加</li>
    </ul>
   </li>
  </ul>

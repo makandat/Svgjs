@@ -1,11 +1,11 @@
-/* SVG class v2.2.0 */
+/* SVG class v2.3.0 */
 'use strict';
 
-/* == SVG コンテナクラス (v2.2.0) == */
+/* == SVG コンテナクラス (v2.3.0) == */
 class SvgContainer {
   /* バージョン */
   get Version() {
-    "2.2.0";
+    "2.3.0";
   }
   
   /* コンストラクタ */
@@ -104,9 +104,10 @@ class SvgContainer {
 }
 
 
-/* == SVG 図形の基本クラス (v2.2.0) == */
+/* == SVG 図形の基本クラス (v2.3.0) == */
 class SvgShape {
-  /* コンストラクタ (v.2.2.0) */
+ 
+  /* コンストラクタ (v.2.3.0) */
   constructor(options=null) {
     this._width = 640;
     this._height = 480;
@@ -115,15 +116,46 @@ class SvgShape {
       this._bgcolor = "white";
       this._borderWidth = 1;
       this._title = "";
+      this._borderType = SvgShape.SOLID;
+      this._opacity = 0;
+      this._movex = 0;
+      this._movey = 0;
+      this._rotate = 0;
+      this._scalex = 1;
+      this._scaley = 1;
+      this._marker = "";
     }
     else {
       this._fgcolor = options["fgcolor"] == undefined ? "black" : options["fgcolor"];
       this._bgcolor = options["bgcolor"] == undefined ? "white" : options["bgcolor"];
       this._borderWidth = options["borderWidth"] == undefined ? 1 : options["borderWidth"];
       this._title = options["title"] == undefined ? "" : options["title"];
+      this._borderType = options["borderType"] == undefined ? SvgShape.SOLID : options["borderType"];
+      this._opacity = options["opacity"] == undefined ? 0 : options["opacity"];
+      this._movex = options["movex"] == undefined ? 0 : options["movex"];
+      this._movey = options["movey"] == undefined ? 0 : options["movey"];
+      this._rotate = options["rotate"] == undefined ? 0 : options["rotate"];
+      this._scalex = options["scalex"] == undefined ? 1 : options["scalex"];
+      this._scaley = options["scaley"] == undefined ? 1 : options["scaley"];
+      this._marker = options["marker"] == undefined ? "" : options["marker"];
     }
   }
   
+  /* 線種(実線) */
+  static get SOLID() {
+    return 0;
+  }
+  
+  /* 線種(点線) */
+  static get DOTTED() {
+    return 1;
+  }
+  
+  /* 線種(破線) */
+  static get DASSHED() {
+    return 2;
+  }
+
   /* キャンバスサイズを設定する。*/
   setSize(w, h) {
     this._width = w;
@@ -165,6 +197,77 @@ class SvgShape {
   set title(c) {
     this._title = c;
   }
+  
+  /* 線種 */
+  get borderType() {
+    return this._borderType;
+  }
+  
+  set borderType(c) {
+    this._borderType = c;
+  }
+  
+  /* 背景色の透過度 */
+  get opacity() {
+    return this._opacity;
+  }
+  
+  set opacity(c) {
+    this._opacity = c;
+  }
+  
+  /* 境界線コードをダッシュ配列に変換する。*/
+  static getDashArray(border) {
+    var dash = "";
+    switch (border) {
+      case SvgShape.DOTTED:
+        dash = "2,2";
+        break;
+        
+      case SvgShape.DASHED:
+        dash = "8,2";
+        break;
+        
+      default:
+        break;
+    }  
+    return dash;
+  }
+  
+  /* 起点を移動 (v2.3.0) */
+  move(x, y) {
+    this._movex = x;
+    this._movey = y;
+  }
+  
+  /* 回転する (v2.3.0) */
+  rotate(a) {
+    this._rotate = a;
+  }
+  
+  /* 拡大・縮小 (v2.3.0) */
+  scale(rx, ry) {
+    this._scalex = rx;
+    this._scaley = ry;
+  }
+  
+  /* マーカ (矢印) */
+  get marker() {
+    return this._marker;
+  }
+  
+  set marker(c) {
+    this._marker = c;
+  }
+  
+  /* 画像 */
+  get image() {
+    return this._image;
+  }
+  
+  set image(c) {
+    this._image = c;
+  }  
 }
 
 /* == 直線クラス == */
@@ -178,10 +281,44 @@ class SvgLine extends SvgShape {
     this._y2 = y2;
   }
 
-  /* SVG の文字列(body+style) */
+  /* SVG の文字列 (SvgLine) */
   toString() {
-    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};`;
-    let shape = `<line x1="${this._x1}" y1="${this._y1}" x2="${this._x2}" y2="${this._y2}" style="${style}" />\n`;
+    let shape = `<line x1="${this._x1}" y1="${this._y1}" x2="${this._x2}" y2="${this._y2}" stroke="${this._fgcolor}" stroke-width="${this._borderWidth}" />\n`;
+    // 線種
+    if (this._borderType != SvgShape.SOLID) {
+      let dash = SvgShape.getDashArray(this._borderType);
+      shape = `<line x1="${this._x1}" y1="${this._y1}" x2="${this._x2}" y2="${this._y2}" stroke="${this._fgcolor}" stroke-width="${this._borderWidth}" stroke-dasharray="${dash}" />\n`;
+    }
+    // 矢印
+    if (this._marker != "") {
+      let marker_id = "#" + this._marker;
+      shape = shape.replace("/>", `marker-end="url(${marker_id})" />`);
+    }
+    // 変形
+    let transform = "";
+    if (this._movex == 0 && this._movey == 0) {
+      // そのまま
+    }
+    else {
+      transform += `translate(${this._movex}, ${this._movey})`;
+    }
+    if (this._rotate == 0) {
+      // そのまま
+    }
+    else {
+      transform += ` rotate(${this._rotate})`;
+    }
+    if (this._scalex == 1 && this._scaley == 1) {
+      // そのまま
+    }
+    else {
+      transform += ` scale(${this._scalex}, ${this._scaley})`;
+    }
+    
+    if (transform != "") {
+      shape = shape.replace("/>", `transform="${transform}"` + " />");
+    }
+    
     return shape;
   }
 }
@@ -206,10 +343,40 @@ class SvgRect extends SvgShape {
     this._ry = ry;
   }
 
-  /* SVG の文字列(body+style) */
+  /* SVG の文字列 (SvgRect) */
   toString() {
-    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
+    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor};`;
+    let transform = "";
+    if (this._movex == 0 && this._movey == 0) {
+      // そのまま
+    }
+    else {
+      transform += `translate(${this._movex}, ${this._movey})`;
+    }
+    if (this._rotate == 0) {
+      // そのまま
+    }
+    else {
+      transform += ` rotate(${this._rotate})`;
+    }
+    if (this._scalex == 1 && this._scaley == 1) {
+      // そのまま
+    }
+    else {
+      transform += ` scale(${this._scalex}, ${this._scaley})`;
+    }
+       
+    if (this._borderType != SvgShape.SOLID) {
+      let dash = SvgShape.getDashArray(this._borderType);
+      style += `stroke-dasharray:${dash};`;
+    }
+    if (this._opacity > 0 && this._opacity <= 1) {
+      style += `fill-opacity:${this._opacity};`;
+    }
     let shape = `<rect x="${this._x}" y ="${this._y}" width="${this._rect_width}" height="${this._rect_height}" rx="${this._rx}" ry="${this._ry}" style="${style}" />\n`;
+    if (transform != "") {
+      shape = shape.replace("/>", `transform="${transform}"` + " />");
+    }
     return shape;    
   }
 }
@@ -224,10 +391,39 @@ class SvgCircle extends SvgShape {
     this._r = r;
   }
 
-  /* SVG の文字列(body+style) */
+  /* SVG の文字列 (SvgCircle) */
   toString() {
-    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
+    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor};`;
+    if (this._borderType != SvgShape.SOLID) {
+      let dash = SvgShape.getDashArray(this._borderType);
+      style += `stroke-dasharray:${dash};`;
+    }
+    if (this._opacity > 0 && this._opacity <= 1) {
+      style += `fill-opacity:${this._opacity};`;
+    }
+    let transform = "";
+    if (this._movex == 0 && this._movey == 0) {
+      // そのまま
+    }
+    else {
+      transform += `translate(${this._movex}, ${this._movey})`;
+    }
+    if (this._rotate == 0) {
+      // そのまま
+    }
+    else {
+      transform += ` rotate(${this._rotate})`;
+    }
+    if (this._scalex == 1 && this._scaley == 1) {
+      // そのまま
+    }
+    else {
+      transform += ` scale(${this._scalex}, ${this._scaley})`;
+    }
     let shape = `<circle cx="${this._x}" cy ="${this._y}" r="${this._r}" style="${style}" />\n`;
+    if (transform != "") {
+      shape = shape.replace("/>", `transform="${transform}"` + " />");
+    }
     return shape;
   }
 }
@@ -244,10 +440,39 @@ class SvgEllipse extends SvgShape {
     this._ry = ry;
   }
 
-  /* SVG の文字列(body+style) */
+  /* SVG の文字列 (SvgEllipse) */
   toString() {
-    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
+    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor};`;
+    if (this._borderType != SvgShape.SOLID) {
+      let dash = SvgShape.getDashArray(this._borderType);
+      style += `stroke-dasharray:${dash};`;
+    }
+    if (this._opacity > 0 && this._opacity <= 1) {
+      style += `fill-opacity:${this._opacity};`;
+    }
+    let transform = "";
+    if (this._movex == 0 && this._movey == 0) {
+      // そのまま
+    }
+    else {
+      transform += `translate(${this._movex}, ${this._movey})`;
+    }
+    if (this._rotate == 0) {
+      // そのまま
+    }
+    else {
+      transform += ` rotate(${this._rotate})`;
+    }
+    if (this._scalex == 1 && this._scaley == 1) {
+      // そのまま
+    }
+    else {
+      transform += ` scale(${this._scalex}, ${this._scaley})`;
+    }
     let shape = `<ellipse cx="${this._x}" cy ="${this._y}" rx="${this._rx}" ry="${this._ry}" style="${style}" />`;
+    if (transform != "") {
+      shape = shape.replace("/>", `transform="${transform}"` + " />");
+    }
     return shape;
   }
 }
@@ -278,11 +503,41 @@ class SvgPolyline extends SvgShape {
     } 
   }
 
-  /* SVG の文字列(body+style) */
+  /* SVG の文字列 (SvgPolyline) */
   toString() {
     let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};`;
+    if (this._borderType != SvgShape.SOLID) {
+      let dash = SvgShape.getDashArray(this._borderType);
+      style += `stroke-dasharray:${dash};`;
+    }
+    if (this._marker != "") {
+      let marker_id = "#" + this._marker;
+      style += `marker-end:url(${marker_id});`;
+    }
     let p = this._points.join(' ');
+    let transform = "";
+    if (this._movex == 0 && this._movey == 0) {
+      // そのまま
+    }
+    else {
+      transform += `translate(${this._movex}, ${this._movey})`;
+    }
+    if (this._rotate == 0) {
+      // そのまま
+    }
+    else {
+      transform += ` rotate(${this._rotate})`;
+    }
+    if (this._scalex == 1 && this._scaley == 1) {
+      // そのまま
+    }
+    else {
+      transform += ` scale(${this._scalex}, ${this._scaley})`;
+    }
     let shape = `<polyline fill="none" points="${p}" style="${style}" />`;
+    if (transform != "") {
+      shape = shape.replace("/>", `transform="${transform}"` + " />");
+    }
     return shape;
   }
 }
@@ -313,11 +568,40 @@ class SvgPolygon extends SvgShape {
     } 
   }
 
-  /* SVG の文字列(body+style) */
+  /* SVG の文字列 (SvgPolygon) */
   toString() {
-    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
+    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor};`;
+    if (this._borderType != SvgShape.SOLID) {
+      let dash = SvgShape.getDashArray(this._borderType);
+      style += `stroke-dasharray:${dash};`;
+    }
+    if (this._opacity > 0 && this._opacity <= 1) {
+      style += `fill-opacity:${this._opacity};`;
+    }
     let p = this._points.toString();
+    let transform = "";
+    if (this._movex == 0 && this._movey == 0) {
+      // そのまま
+    }
+    else {
+      transform += `translate(${this._movex}, ${this._movey})`;
+    }
+    if (this._rotate == 0) {
+      // そのまま
+    }
+    else {
+      transform += ` rotate(${this._rotate})`;
+    }
+    if (this._scalex == 1 && this._scaley == 1) {
+      // そのまま
+    }
+    else {
+      transform += ` scale(${this._scalex}, ${this._scaley})`;
+    }
     let shape = `<polygon fill="none" points="${p}" style="${style}" />`;
+    if (transform != "") {
+      shape = shape.replace("/>", `transform="${transform}"` + " />");
+    }
     return shape;
   }
 }
@@ -352,9 +636,31 @@ class SvgText extends SvgShape {
     this._fontFamily = name;
   }
 
-  /* SVG の文字列(body+style) */
+  /* SVG の文字列 (SvgText) */
   toString() {
+    let transform = "";
+    if (this._movex == 0 && this._movey == 0) {
+      // そのまま
+    }
+    else {
+      transform += `translate(${this._movex}, ${this._movey})`;
+    }
+    if (this._rotate == 0) {
+      // そのまま
+    }
+    else {
+      transform += ` rotate(${this._rotate})`;
+    }
+    if (this._scalex == 1 && this._scaley == 1) {
+      // そのまま
+    }
+    else {
+      transform += ` scale(${this._scalex}, ${this._scaley})`;
+    }
     let body = `<text x="${this._x}" y="${this._y}" fill="${this._fgcolor}" font-family="${this._fontfamily}" font-size="${this._fontsize}">`;
+    if (transform != "") {
+      body = body.replace(">", ` transform="${transform}"` + ">");
+    }
     body += this._text;
     let text = body + "</text>";
     return text;
@@ -383,9 +689,17 @@ class SvgPath extends SvgShape {
     this._path = p;
   }
   
-  /* 文字列表現 */
+  /* 文字列表現 (SvgPath) */
   toString() {
-    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor}`;
+    let style = `stroke:${this._fgcolor};stroke-width:${this._borderWidth};fill:${this._bgcolor};`;
+    if (this._borderType != SvgShape.SOLID) {
+      let dash = SvgShape.getDashArray(this._borderType);
+      style += `stroke-dasharray:${dash};`;
+    }
+    if (this._marker != "") {
+      let marker_id = "#" + this._marker;
+      style += `marker-end=url(${marker_id});`;
+    }
     let shape = `<path d="${this._path}" style="${style}" />`;
     return shape;
   }
@@ -393,7 +707,7 @@ class SvgPath extends SvgShape {
 
 
 /* == Use クラス (v2.2.0) == */
-class SvgUse extends SvgShape{
+class SvgUse extends SvgShape {
   /* コンストラクタ */
   constructor(x, y, w, h, xlink, options=null) {
     super(options);
@@ -407,6 +721,25 @@ class SvgUse extends SvgShape{
   /* 文字列表現 */
   toString() {
     let use = `<use x="${this._x}" y="${this._y}" width="${this._width}" height="${this._height}" xlink:href="${this._xlink}" />`;
+    return use;
+  }
+}
+
+/* == Image クラス (v2.3.0) == */
+class SvgImage extends SvgShape {
+  /* コンストラクタ */
+  constructor(x, y, w, h, xlink, options=null) {
+    super(options);
+    this._x = x;
+    this._y = y;
+    this._width = w;
+    this._height = h;
+    this._xlink = xlink;
+  }
+
+  /* 文字列表現 (SvgImage) */
+  toString() {
+    let use = `<image x="${this._x}px" y="${this._y}px" width="${this._width}px" height="${this._height}px" xlink:href="${this._xlink}" />`;
     return use;
   }
 }

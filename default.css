@@ -56,6 +56,7 @@ h2 {
   padding-left:2.5%;
   margin-top:25px;
   margin-bottom:26px;
+  border-left: solid 30px #40c0ff;
   /* border-bottom: solid thin darkorchid; */
 }
 h3 {

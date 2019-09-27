@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta charset="utf-8" />
- <title>Svg2.js v2.2.0 use</title>
+ <title>Svg2.js v2.3.0 opacity</title>
  <link rel="stylesheet" href="default.css" />
  <style>
   .section {
@@ -19,23 +19,25 @@
  </style>
  <script src="Svg2.js"></script>
  <script>
+  'use strict';
   function onload() {
     var c = new SvgContainer(640, 480);
-    c.defs_literal = `<defs>
-      <symbol id="eye" viewbox="0 0 680 480">
-        <circle cx="320" cy="240" r="160" stroke="black" fill="white" stroke-width="4"></circle>
-        <circle cx="320" cy="240" r="50" stroke="dimgray" fill="black"></circle>
-      </symbol>
-    </defs>`;
-    var use = new SvgUse(0, 0, 640, 480, "#eye");
-    c.add(use);
+    var circle1 = new SvgCircle(300, 240, 200, {bgcolor:"cyan", opacity:1});   
+    c.add(circle1);
+    var rect1 = new SvgRect(120, 120, 460, 160);
+    rect1.fgColor = "darkblue";
+    rect1.bgColor = "#ffc0e0";
+    rect1.borderWidth = 4;
+    rect1.borderType = SvgShape.SOLID;
+    rect1.opacity = 0.4;
+    c.add(rect1);
     SvgContainer.setSvgById("shapes", c.toString());
   }
  </script>
 </head>
 
 <body onload="onload()">
- <h1>Svg2.js v2.2.0 Use</h1>
+ <h1>Svg2.js v2.3.0 Opacity</h1>
  <div class="menubar"><a href="/">HOME</a> | <a href="index.html#test">Index</a></div>
  <div class="section">
   <br />
