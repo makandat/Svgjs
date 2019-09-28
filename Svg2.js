@@ -1,11 +1,11 @@
-/* SVG class v2.3.0 */
+/* SVG class v2.4.0 */
 'use strict';
 
-/* == SVG コンテナクラス (v2.3.0) == */
+/* == SVG コンテナクラス (v2.4.0) == */
 class SvgContainer {
   /* バージョン */
   get Version() {
-    "2.3.0";
+    "2.4.0";
   }
   
   /* コンストラクタ */
@@ -13,8 +13,10 @@ class SvgContainer {
     // キャンバスのサイズ
     this._width = width;
     this._height = height;
-    // SVG 図形のコレクション
+    // SVG 図形 (SvgShape) のコレクション
     this._elements = new Array();
+    // SVG 図形 (SVG 文字列) のコレクション
+    this._literals = new Array();
     // viewBox (v2.1.0)
     this._viewBox = {x:0, y:0, width:this._width, height:this._height};
     // defs タグのリテラル
@@ -76,6 +78,10 @@ class SvgContainer {
     for (let elem of this._elements) {
       str += elem;
     }
+    for (let svg of this._literals) {
+      str += svg;
+      str += "\n";
+    }
     str += "</svg>\n";
     return str;
   }
@@ -101,13 +107,18 @@ class SvgContainer {
       el.innerHTML =body;
     }
   } 
+  
+  /* SVG 文字列を図形として追加する。*/
+  addLiteral(svg) {
+    this._literals.push(svg);
+  }
 }
 
 
-/* == SVG 図形の基本クラス (v2.3.0) == */
+/* == SVG 図形の基本クラス (v2.4.0) == */
 class SvgShape {
  
-  /* コンストラクタ (v.2.3.0) */
+  /* コンストラクタ (v.2.4.0) */
   constructor(options=null) {
     this._width = 640;
     this._height = 480;
@@ -124,6 +135,7 @@ class SvgShape {
       this._scalex = 1;
       this._scaley = 1;
       this._marker = "";
+      this._filter = "";
     }
     else {
       this._fgcolor = options["fgcolor"] == undefined ? "black" : options["fgcolor"];
@@ -138,9 +150,15 @@ class SvgShape {
       this._scalex = options["scalex"] == undefined ? 1 : options["scalex"];
       this._scaley = options["scaley"] == undefined ? 1 : options["scaley"];
       this._marker = options["marker"] == undefined ? "" : options["marker"];
+      this._filter = options["filter"] == undefined ? "" : options["filter"];
     }
   }
   
+  /* 文字列表現 (必ずオーバーライドする) */
+  toString() {
+    return "";
+  }
+
   /* 線種(実線) */
   static get SOLID() {
     return 0;
@@ -267,7 +285,22 @@ class SvgShape {
   
   set image(c) {
     this._image = c;
-  }  
+  }
+
+  /* フィルタ */
+  get filter() {
+    return this._filter; 
+  }
+
+  set filter(id) {
+    this._filter = id;
+  }
+
+  /* 色調遷移 (gradient) */
+  setGradient(id) {
+    let grad = "#" + id;
+    this._bgcolor = `url(${grad})`;
+  }
 }
 
 /* == 直線クラス == */
@@ -318,7 +351,12 @@ class SvgLine extends SvgShape {
     if (transform != "") {
       shape = shape.replace("/>", `transform="${transform}"` + " />");
     }
-    
+    // フィルタ
+    if (this._filter != "") {
+      let filter_id = "#" + this._filter;
+      shape = shape.replace("/>", `filter="url(${filter_id})"` + " />");
+    }
+
     return shape;
   }
 }
@@ -377,6 +415,11 @@ class SvgRect extends SvgShape {
     if (transform != "") {
       shape = shape.replace("/>", `transform="${transform}"` + " />");
     }
+    // フィルタ
+    if (this._filter != "") {
+      let filter_id = "#" + this._filter;
+      shape = shape.replace("/>", `filter="url(${filter_id})"` + " />");
+    }
     return shape;    
   }
 }
@@ -423,6 +466,11 @@ class SvgCircle extends SvgShape {
     let shape = `<circle cx="${this._x}" cy ="${this._y}" r="${this._r}" style="${style}" />\n`;
     if (transform != "") {
       shape = shape.replace("/>", `transform="${transform}"` + " />");
+    }
+    // フィルタ
+    if (this._filter != "") {
+      let filter_id = "#" + this._filter;
+      shape = shape.replace("/>", `filter="url(${filter_id})"` + " />");
     }
     return shape;
   }
@@ -472,6 +520,11 @@ class SvgEllipse extends SvgShape {
     let shape = `<ellipse cx="${this._x}" cy ="${this._y}" rx="${this._rx}" ry="${this._ry}" style="${style}" />`;
     if (transform != "") {
       shape = shape.replace("/>", `transform="${transform}"` + " />");
+    }
+    // フィルタ
+    if (this._filter != "") {
+      let filter_id = "#" + this._filter;
+      shape = shape.replace("/>", `filter="url(${filter_id})"` + " />");
     }
     return shape;
   }
@@ -538,6 +591,11 @@ class SvgPolyline extends SvgShape {
     if (transform != "") {
       shape = shape.replace("/>", `transform="${transform}"` + " />");
     }
+    // フィルタ
+    if (this._filter != "") {
+      let filter_id = "#" + this._filter;
+      shape = shape.replace("/>", `filter="url(${filter_id})"` + " />");
+    }
     return shape;
   }
 }
@@ -602,6 +660,11 @@ class SvgPolygon extends SvgShape {
     if (transform != "") {
       shape = shape.replace("/>", `transform="${transform}"` + " />");
     }
+    // フィルタ
+    if (this._filter != "") {
+      let filter_id = "#" + this._filter;
+      shape = shape.replace("/>", `filter="url(${filter_id})"` + " />");
+    }
     return shape;
   }
 }
@@ -661,6 +724,11 @@ class SvgText extends SvgShape {
     if (transform != "") {
       body = body.replace(">", ` transform="${transform}"` + ">");
     }
+    // フィルタ
+    if (this._filter != "") {
+      let filter_id = "#" + this._filter;
+      text = text.replace("/>", `filter="url(${filter_id})"` + " />");
+    }
     body += this._text;
     let text = body + "</text>";
     return text;
@@ -701,6 +769,11 @@ class SvgPath extends SvgShape {
       style += `marker-end=url(${marker_id});`;
     }
     let shape = `<path d="${this._path}" style="${style}" />`;
+    // フィルタ
+    if (this._filter != "") {
+      let filter_id = "#" + this._filter;
+      shape = shape.replace("/>", `filter="url(${filter_id})"` + " />");
+    }
     return shape;
   }
 }

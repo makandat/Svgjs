@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>Svg2.js v2.4.0 Gradient</title>
+ <link rel="stylesheet" href="default.css" />
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+  .canvas {
+    display:inline-block;
+    width:640px;
+    height:480px;
+    border:dotted 1px silver;
+  }
+ </style>
+ <script src="Svg2.js"></script>
+ <script>
+  'use strict';
+  function onload() {
+    var c = new SvgContainer(640, 480);
+    c.defs_literal = `<defs>
+    <linearGradient id="gradLinear" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:rgb(255, 255, 0); stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rbg(0, 128, 80); stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="gradRadial" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" style="stop-color:rgb(64, 255, 64); stop-opacity:0" />
+      <stop offset="100%" style="stop-color:rgb(255, 192, 255); stop-opacity:1" />
+    </radialGradient>
+  </defs>`;
+    var rect1 = new SvgRect(120, 60, 320, 200, {fgcolor:"black", borderWidth:3});
+    rect1.setRound(12, 12);
+    rect1.setGradient("gradLinear");
+    c.add(rect1);
+    var circle1 = new SvgCircle(250, 290, 160, {fgcolor:"#c04080", borderWidth:2});
+    circle1.setGradient("gradRadial");
+    c.add(circle1);
+    SvgContainer.setSvgById("shapes", c.toString());
+  }
+ </script>
+</head>
+
+<body onload="onload()">
+ <h1>Svg2.js v2.4.0 Gradient</h1>
+ <div class="menubar"><a href="/">HOME</a> | <a href="index.html#test">Index</a></div>
+ <div class="section">
+  <br />
+  <div id="shapes" class="canvas"></div>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>

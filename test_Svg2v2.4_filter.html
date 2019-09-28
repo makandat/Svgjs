@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <title>Svg2.js v2.4.0 filter</title>
+ <link rel="stylesheet" href="default.css" />
+ <style>
+  .section {
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:20px;
+  }
+  .canvas {
+    display:inline-block;
+    width:640px;
+    height:480px;
+    border:dotted 1px silver;
+  }
+ </style>
+ <script src="Svg2.js"></script>
+ <script>
+  'use strict';
+  function onload() {
+    var c = new SvgContainer(640, 480);
+    c.defs_literal = `<defs>
+    <filter id="blur" x="0" y="0">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
+    </filter>
+    <filter id="shadow" x="0" y="0" width="200%" height="200%">
+      <feOffset result="offOut" in="SourceGraphic" dx="20" dy="20" />
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+  </defs>`;
+    var rect1 = new SvgRect(120, 60, 320, 200, {bgcolor:"indianred"});
+    rect1.setRound(12, 12);
+    rect1.filter = "blur";
+    c.add(rect1);
+    c.addLiteral(`<rect x="250" y="290" width="160" height="160" filter="url(#shadow)" style="stroke:#c04000;stroke-width:2;fill:blue;" />`);
+    SvgContainer.setSvgById("shapes", c.toString());
+  }
+ </script>
+</head>
+
+<body onload="onload()">
+ <h1>Svg2.js v2.4.0 Filter</h1>
+ <div class="menubar"><a href="/">HOME</a> | <a href="index.html#test">Index</a></div>
+ <div class="section">
+  <br />
+  <div id="shapes" class="canvas"></div>
+ </div>
+ <p>&nbsp;</p>
+ <p style="text-align:center;"><a href="#top">TOP</a></p>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</body>
+</html>

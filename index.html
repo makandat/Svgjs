@@ -64,14 +64,16 @@
   <li><a href="test_Svg2mix1.html">Mix(1)</a></li>
   <li><a href="test_Svg2mix2.html">Mix(2)</a></li>
   <li><a href="test_Svg2mix3.html">Mix(3)</a></li>
-  <li><a href="test_Svg2v2.1.html">New features v2.1.0</a></li>
-  <li><a href="test_Svg2v2.2_path.html">New features v2.2.0 path</a></li>
-  <li><a href="test_Svg2v2.2_use.html">New features v2.2.0 use</a></li>
-  <li><a href="test_Svg2v2.3_dash.html">New features v2.3.0 dash</a></li>
-  <li><a href="test_Svg2v2.3_opacity.html">New features v2.3.0 opacity</a></li>
-  <li><a href="test_Svg2v2.3_transform.html">New features v2.3.0 transform</a></li>
-  <li><a href="test_Svg2v2.3_mark.html">New features v2.3.0 mark</a></li>
-  <li><a href="test_Svg2v2.3_image.html">New features v2.3.0 image</a></li>
+  <li><a href="test_Svg2v2.1.html">v2.1.0 New features</a></li>
+  <li><a href="test_Svg2v2.2_path.html">v2.2.0 path</a></li>
+  <li><a href="test_Svg2v2.2_use.html">v2.2.0 use</a></li>
+  <li><a href="test_Svg2v2.3_dash.html">v2.3.0 dash</a></li>
+  <li><a href="test_Svg2v2.3_opacity.html">v2.3.0 opacity</a></li>
+  <li><a href="test_Svg2v2.3_transform.html">v2.3.0 transform</a></li>
+  <li><a href="test_Svg2v2.3_mark.html">v2.3.0 mark</a></li>
+  <li><a href="test_Svg2v2.3_image.html">v2.3.0 image</a></li>
+  <li><a href="test_Svg2v2.4_gradient.html">v2.4.0 Gradient</a></li>
+  <li><a href="test_Svg2v2.4_filter.html">v2.4.0 Filter</a></li>
  </ul>
  <br />
 
@@ -81,30 +83,33 @@
  <h3>クラス</h3>
  <p>Svg2.js は次のクラスからなる。</p>
  <dl>
-  <dt>SvgContainer</dt>
-  <dd>SvgShape またはその派生クラス(円や矩形など)のインスタンスのコンテナである。</ddt>
+  <dt>><a href="#SvgContainer">SvgContainer</a></dt>
+  <dd>SvgShape またはその派生クラス(円や矩形など)のインスタンスのコンテナである。</dd>
  </dl>
  <dl>
-  <dt>SvgShape</dt>
-  <dd>具体的な図形クラスの基底クラスである。</ddt>
+  <dt><a href="#SvgShape">SvgShape</a></dt>
+  <dd>SvgShapeは具体的な図形クラスの基底クラスである。</ddt>
  </dl>
  <dl>
   <dt>Svg...</dt>
   <dd>具体的な図形クラスを表すクラスである。次のようなものがある。
     <ul>
-     <li>SvgLine</li>
-     <li>SvgRect</li>
-     <li>SvgCircle</li>
-     <li>SvgEllipse</li>
-     <li>SvgPolyline</li>
-     <li>SvgPolygon</li>
-     <li>SvgText</li>
+     <li><a href="#SvgLine">SvgLine</a></li>
+     <li><a href="#SvgRect">SvgRect</a></li>
+     <li><a href="#SvgCircle">SvgCircle</a></li>
+     <li><a href="#SvgEllipse">SvgEllipse</a></li>
+     <li><a href="#SvgPolyline">SvgPolyline</a></li>
+     <li><a href="#SvgPolygon">SvgPolygon</a></li>
+     <li><a href="#SvgText">SvgText</a></li>
+     <li><a href="#SvgPath">SvgPath</a></li>
+     <li><a href="#SvgUse">SvgUse</a></li>
+     <li><a href="#SvgImage">SvgImage</a></li>
     </ul>
   </ddt>
  </dl>
  <br />
   <!--  SvgContainer クラス -->
- <h3>SvgContainer クラス</h3>
+ <h3><a id="SvgContainer"></a>SvgContainer クラス</h3>
   <h4>基底クラス</h4>
   <p>なし。</p>
   <h4>コンストラクタ</h4>
@@ -130,6 +135,12 @@
    <h5>static setSvgByTag(tag, body)</h5>
    <p>タグ名 tag で指定されたすべての HTML 要素の 内容 (HTML) に body (xmlヘッダなしのSVG) を割り当てる。</p>
    <br />
+   <h5>viewBox(x, y, width, height)</h5>
+   <p>viewBox を設定する。このメソッドを実行しない場合、viewBox は描画領域 (キャンバス) と同じになる。</p>
+   <br />
+   <h5>addLiteral(svg)</h5>
+   <p>SVG 文字列を図形として追加する。</p>
+   <br />
   <h4>プロパティ</h4>
    <h5>(get) Version</h5>
    <p>バージョン番号を返す。</p>
@@ -146,22 +157,40 @@
    <h5>(get/set) height</h5>
    <p>描画領域の高さ。(主にクラス内部で使用する)</p>
    <br />
-   <h5>(get/set) literal</h5>
+   <h5>(get/set) defs_literal</h5>
    <p>svg タグに含まれる SVG コード。defs などの定義そのものを想定している。</p>
    <br />
   <br />
   
    
   <!--  SvgShape クラス -->
- <h3>SvgShape クラス</h3>
+ <h3><a id="SvgShape"></a>SvgShape クラス</h3>
   <h4>基底クラス</h4>
   <p>なし。</p>
   <h4>コンストラクタ</h4>
   <h5>constructor()</h5>
   <br />
   <h4>メソッド</h4>
+  <h5>toString()</h5>
+  <p>この図形の文字列表現(SVG)を返す。SvgShape では空文字列を返すので、必ずオーバーライドする必要がある。</p>
+  <br />
   <h5>setSize(w, h)</h5>
   <p>描画領域の幅と高さをそれぞれ w, h に設定する。(主にクラス内部で使用する)</p>
+  <br />
+  <h5>static getDashArray(border)</h5>
+  <p>境界線のコードをダッシュ配列に変換する。主にクラス内部で使用するが、このメソッドをオーバーライドすれば、様々な境界線を描画できる。</p>
+  <br />
+  <h5>move(x, y)</h5>
+  <p>図形の起点を (x, y) に変更する。</p>
+  <br />
+  <h5>rotate(a)</h5>
+  <p>図形を起点を中心にして回転する。</p>
+  <br />
+  <h5>scale(rx, ry)</h5>
+  <p>図形を拡大率 (rx, ry) に従って拡大あるいは縮小する。</p>
+  <br />
+  <h5>setGradient(id)</h5>
+  <p>defs で定義した色調遷移 id を設定する。</p>
   <br />
   <h4>プロパティ</h4>
   <h5>(get/set) fgColor</h5>
@@ -175,37 +204,58 @@
   <br />
   <h5>(get/set) title</h5>
   <p>図形のタイトルを取得・設定する。初期値は ""。</p>
+  <h5>(get) SOLID</h5>
+  <p>線の種類として実線を意味する。borderType と共に使用する。</p>
+  <br />
+  <h5>(get) DOTTED</h5>
+  <p>線の種類として点線を意味する。borderType と共に使用する。</p>
+  <br />
+  <h5>(get) DASHED</h5>
+  <p>線の種類として破線を意味する。borderType と共に使用する。</p>
+  <br />
+  <h5>(get/set) borderType</h5>
+  <p>境界線の種類(SOLID, DOTTED, DASHED のどれか)を取得・設定する。</p>
+  <br />
+  <h5>(get/set) opacity</h5>
+  <p>背景の透過率を取得・設定する。</p>
   <br />
 
   <!--  SvgShape から派生した図形クラス -->
   <h3>SvgShape から派生した図形クラス</h3>
-  <h4>SvgLine</h4>
+  <!--   SvgLine -->
+  <h4><a id="SvgLine"></a>SvgLine</h4>
   <p>このクラスは直線を表す図形クラス。コンストラクタは<blockquote>constructor(x1, y1, x2, y2)</blockquote>
 で、(x1, y1) は直線の起点、(x2, y2)は終点を表す。
 </p>
   <br />
-  <h4>SvgRect</h4>
+  <!--   SvgRect -->
+  <h4><a id="SvgRect"></a>SvgRect</h4>
   <p>このクラスは矩形を表す図形クラス。コンストラクタは<blockquote>constructor(x, y, w, h)</blockquote>
 で、(x, y) は矩形の左上の座標、w は矩形の幅、 h は高さを表す。独自に メソッド setRoundt(rx, ry) を持つ。これは矩形の角を丸めるとき使用する。rx, ry は丸めの幅と高さである。
 </p>
   <br />
-  <h4>SvgCircle</h4>
+  <!--   SvgCircle -->
+  <h4><a id="SvgCircle"></a>SvgCircle</h4>
   <p>このクラスは円を表す図形クラス。コンストラクタは<blockquote>constructor(x, y, r)</blockquote>
 で、(x, y) は円の中心、r は半径を表す。</p>
   <br />
-  <h4>SvgEllipse</h4>
+  <!--   SvgEllipse -->
+  <h4><a id="SvgEllipse"></a>SvgEllipse</h4>
   <p>このクラスは楕円表す図形クラス。コンストラクタは<blockquote>constructor(x, y, rx, ry)</blockquote>
 で、(x, y) は楕円の中心、rx, ry はそれぞれ x 方向と y 方向の半径を表す。</p>
   <br />
-  <h4>SvgPolyline</h4>
+  <!--   SvgPolyline -->
+  <h4><a id="SvgPolyline"></a>SvgPolyline</h4>
   <p>このクラスは折れ線を表す図形クラス。コンストラクタは<blockquote>constructor()</blockquote>
 である。折れ線の指定は、メソッド addPoint(x, y) またはプロパティ (get/set) points で行う。points は (x1, y1, x2, y2, ..) のフラットな配列である。</p>
   <br />
-  <h4>SvgPolygon</h4>
+  <!--   SvgPolygon -->
+  <h4><a id="SvgPolygon"></a>SvgPolygon</h4>
   <p>このクラスは多角形を表す図形クラス。コンストラクタは<blockquote>constructor()</blockquote>
 である。多角形の指定は、メソッド addPoint(x, y) またはプロパティ (get/set) points で行う。points は (x1, y1, x2, y2, ..) のフラットな配列である。</p>
   <br />
-  <h4>SvgText</h4>
+  <!--   SvgText -->
+  <h4><a id="SvgText"></a>SvgText</h4>
   <p>このクラスは文字列を表す図形クラス。コンストラクタは<blockquote>constructor(text, x=0, y=0)</blockquote>で text は描画する文字列、(x, y) は描画位置の座標である。このクラスは次の独自プロパティを持つ。</p>
   <ul>
     <li>(get/set) fontSize: フォントの大きさを取得・設定。</li>
@@ -213,16 +263,23 @@
   </ul>
   <br />
 
-  <h4>SvgUse</h4>
+  <!--   SvgUse -->
+  <h4><a id="SvgUse"></a>SvgUse</h4>
   <p>このクラスは defs_literal で定義されたシンボルなどを描画する図形クラス。コンストラクタは<blockquote>constructor(x, y, w, h, xlink)</blockquote>で (x, y) は描画位置の座標、w, h は図形の幅と高さ、xlink はシンボルなどの識別文字列である。</p>
   <br />
 
-  <h4>SvgPath</h4>
+  <!--   SvgPath -->
+  <h4><a id="SvgPath"></a>SvgPath</h4>
   <p>このクラスはパスコマンドによる描画図形クラス。コンストラクタは<blockquote>constructor()</blockquote>である。パスコマンドの追加あるいは設定は次のメソッド、プロパティで行う。</p>
   <ul>
     <li>addCommand(cmd): パスコマンド(cmd)を追加する。</li>
     <li>(get/set) path: パスコマンド全体を取得・設定。</li>
   </ul>
+  <br />
+
+  <!--   SvgImage -->
+  <h4><a id="SvgImage"></a>SvgImage</h4>
+  <p>このクラスは指定された URL からダウンロードした画像を描画するクラス。コンストラクタは<blockquote>constructor(x, y, w, h, xlink, options=null)</blockquote>である。xlink は画像の URL を指定する。</p>
   <br />
 
  <!-- 履歴 -->
@@ -254,6 +311,7 @@
    </ul>
   <li>v2.40 2019-09-28
    <ul>
+     <li>addLiteral(svg) メソッド追加</li>
      <li>影付きの追加</li>
      <li>明暗・色調遷移の追加</li>
      <li>文字飾り(下線など)の追加</li>
